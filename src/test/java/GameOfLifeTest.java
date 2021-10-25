@@ -1,4 +1,5 @@
 import objects.Cell;
+import objects.CellStatus;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,5 +37,53 @@ class GameOfLifeTest {
                 () -> assertEquals(edgeNeighbourCount, actual08.size()),
                 () -> assertEquals(anywhereElseNeighbourCount, actual09.size())
         );
+    }
+
+    @Test
+    void should_HaveCorrectAmountOfLivingNeighbours() {
+        // Given
+        GameOfLife app = new GameOfLife(10, 10);
+        Cell[][] grid = getStaticGrid();
+        app.setGrid(grid);
+        // r0c1a2n, r1c1d3n, r3c1d2n, r3c2d0n, r1c7a1n, r7c0a4n (row+n;col+m;alive/dead;live neighbours)
+        int expected01 = 2;
+        int expected02 = 3;
+        int expected03 = 2;
+        int expected04 = 0;
+        int expected05 = 1;
+        int expected06 = 4;
+
+        // When
+        int actual01 = app.countLivingNeighbours(0, 1);
+        int actual02 = app.countLivingNeighbours(1, 1);
+        int actual03 = app.countLivingNeighbours(3, 1);
+        int actual04 = app.countLivingNeighbours(3, 2);
+        int actual05 = app.countLivingNeighbours(1, 7);
+        int actual06 = app.countLivingNeighbours(7, 0);
+
+        // Then
+        assertAll(
+                () -> assertEquals(expected01, actual01),
+                () -> assertEquals(expected02, actual02),
+                () -> assertEquals(expected03, actual03),
+                () -> assertEquals(expected04, actual04),
+                () -> assertEquals(expected05, actual05),
+                () -> assertEquals(expected06, actual06)
+        );
+    }
+
+    private Cell[][] getStaticGrid() {
+        return new Cell[][] {
+                { new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE) },
+                { new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE) },
+                { new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE) },
+                { new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE) },
+                { new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE) },
+                { new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE) },
+                { new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE) },
+                { new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE) },
+                { new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE) },
+                { new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE), new Cell(CellStatus.ALIVE), new Cell(CellStatus.DEAD), new Cell(CellStatus.ALIVE) }
+        };
     }
 }
